@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live HTML Editor with Monaco</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            gap: 10px;
+            padding: 20px;
+            height: 100vh;
+            min-width: 200px;
+        }
+        #editor-container {
+            flex: 1;
+            height: 100%;
+            border: 1px solid #ccc;
+            min-width: 200px;
+        }
+        .preview-container {
+            flex: 1;
+            height: 100%;
+        }
+        .preview-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            min-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="border: 5px solid #ffe72e; width: 300px; overflow-y: auto; min-width: 200px;"> 
+        <div style="background-color: #ffe72e; padding: 10px; text-align: center;"> 
+            <h2 style="margin-bottom: 10px; font-size: xx-large; font-weight: bold; color: black;"> HTML Editor </h2> 
+        </div> 
+        <img src="Assets/Icon-Standard.svg" style="width: 50px; height: auto; display: block; margin: 0 auto 10px;"> 
+        <p style="font-size: larger; padding: 10px;">The Teacher's PET simple editor makes it easier to edit or design in HTML for Canvas, Blackboard, and other LMS pages.</p>
+<p style="font-weight: bold; padding: 10px;"> We can find great templates and snippets to design in HTML...but the frustration and overwhelming feeling of adapting those templates gets in the way of your perfect page.</p>
+<p style="padding: 10px;">Use the glossary of common university colors to customize your Teacher's PET course templates. You will paste in the html from your course template download. View the preview as you update or edit elements. Once you are happy with the colors and design, copy your customized HTML into your LMS editor.</p>
+<hr style="background-color: #039be5; height: 8pt; border: none;">
+<h3 style=" padding: 10px;">Color Code Glossary</h3>
+<p style=" padding: 10px;">Locate every # inside of the HTML code in the second column. Those # indicate a place were color can be replaced. You will copy the new code from this glossary.<ul>
+    <li style="color: #0b098b;">&#x25FC; #0b098b (Blue)</li>
+    <li style="color: #dc3545;">&#x25FC; #dc3545 (Red)</li>
+    <li style="color: #ffc107;">&#x25FC; #ffc107 (Yellow)</li>
+    <li style="color: #16752c;">&#x25FC; #16752c (Green)</li>
+    <li style="color: #5928a7;">&#x25FC; #5928a7 (Purple)</li>
+    <li style="color: #e09119;">&#x25FC; #e09119 (Orange)</li>
+    <li style="color: #000000;">&#x25FC; #000000 (Black)</li>
+  </ul></p>
+  <p style=" padding: 10px;"> If you want your specific university or school colors, you should search for the "Brand Standards" to find the exact #Code you need to type into your HTML. For example, search "Your School Brand Kit." You should locate a document that outlines your school's official fonts, logos, and color codes.</p>
+  <img src="Assets/Standard (1).png" style="width: 200px; height: auto; display: block; margin: 0 auto 10px;"> 
+  </div>
+                <!-- Monaco Editor Container -->
+        <div id="editor-container"></div>
+
+        <!-- Live Preview -->
+        <div class="preview-container">
+            <iframe id="preview"></iframe>
+        </div>
+
+
+    <script>
+        // Load Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }});
+        require(["vs/editor/editor.main"], function() {
+            const editor = monaco.editor.create(document.getElementById("editor-container"), {
+                value:  '<Copy and Paste the HTML code here!>\n' +
+                    '<div style="border: 5px solid #2e2424;">\n' +
+       '  <div style="background-color: #2e2424; padding: 10px;">\n' +
+       '    <h2 style="margin-bottom: 10px; font-size: xx-large; font-weight: bold; color: white"> Homework Checklist</h2>\n' +
+       '  </div>\n' +
+       '  <div style="padding: 20px;">\n' +
+       '    <p style="font-size: large;">We are in Week # and Unit BLANK. You will take notes on the materials to learn X, and then complete the HOMEWORK/CLASS ACTIVITIES.</p>\n' +
+       '    <div style="display: flex; gap: 10px;">\n' +
+       '      <a href="#" style="flex: 1; display: block; padding: 10px 20px; background-color: #4AC1FC; color: black; font-weight:bold; font-size: large; border: none; text-decoration: none; cursor: pointer; text-align: center">Class Lesson Plan</a>\n' +
+       '      <a href="#" style="flex: 1; display: block; padding: 10px 20px; background-color: #f9a825; color: Black; font-weight: bold; font-size: large; border: none; text-decoration: none; cursor: pointer; text-align: center ">Reading Quiz</a>\n' +
+       '      <a href="#" style="flex: 1; display: block; padding: 10px 20px; background-color: #ffe72e; color: Black; font-weight: bold; font-size: large; border: none; text-decoration: none; cursor: pointer; text-align: center ">Main Project</a>\n' +
+       '    </div>\n' +
+       '  </div>\n' +
+       '</div>',
+                language: "html",
+                theme: "vs-dark",
+                automaticLayout: true
+            });
+
+            // Function to update live preview
+            function updatePreview() {
+                const previewFrame = document.getElementById("preview");
+                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                let htmlCode = editor.getValue();
+
+// Highlight '#' symbols
+htmlCode = htmlCode.replace(/#/g, '<span style="background-color: yellow;">#</span>');
+
+                previewDoc.open();
+                previewDoc.write(editor.getValue());
+                previewDoc.close();
+            }
+
+            // Update preview on editor change
+            editor.onDidChangeModelContent(updatePreview);
+
+            // Initial preview render
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
